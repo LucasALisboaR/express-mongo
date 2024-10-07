@@ -1,24 +1,19 @@
 import express from "express";
+import ConectaNaDataBase from "./config/dbConnect.js";
+import routes from "./routes/index.js";
+
+const conexao = await ConectaNaDataBase();
+
+conexao.on('error', (erro) => {
+    console.error('Erro de conexao', erro);
+});
+
+conexao.once('open', () => {
+    console.log('Conectado ao banco com sucesso!')
+})
 
 const app = express();
-app.use(express.json());
-
-const livros = [
-    { id: 1, name: 'O hobbit' },
-    { id: 2, name: 'O hobbit 2' }
-]
-
-function buscaLivro(id) {
-    return livros.findIndex(livro => livro.id === Number(id));
-}
-
-app.get('/', (req, res) => {
-    res.status(200).send('Curso de Node.js');
-});
-
-app.get('/livros', (req, res) => {
-    res.status(200).json(livros);
-});
+routes(app);
 
 app.get('/livros/:id', (req, res) => {
     const index = buscaLivro(req.params.id);
