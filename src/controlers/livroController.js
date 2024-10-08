@@ -3,7 +3,7 @@ import { autor } from '../models/Autor.js';
 
 class LivroController {
 
-  static async listarLivros(req, res) {
+  static listarLivros = async (req, res) => {
     try {
       const listaLivros = await livro.find({});
       res.status(200).json(listaLivros);
@@ -12,9 +12,9 @@ class LivroController {
         message: `${erro.message} - falha ao buscar livros`
       });
     }
-  }
+  };
 
-  static async listarLivro(req, res) {
+  static listarLivro = async (req, res) => {
     try {
       const id = req.params.id;
       const livroEncontrado = await livro.findById(id);
@@ -24,9 +24,9 @@ class LivroController {
         message: `${erro.message} - falha ao buscar livro`
       });
     }
-  }
+  };
 
-  static async atualizarLivro(req, res) {
+  static atualizarLivro = async (req, res) => {
     try {
       const id = req.params.id;
       await livro.findByIdAndUpdate(id, req.body);
@@ -38,9 +38,9 @@ class LivroController {
         message: `${erro.message} - falha ao atualizar livro`
       });
     }
-  }
+  };
 
-  static async cadastrarLivro(req, res) {
+  static cadastrarLivro = async (req, res) => {
     const novoLivro = req.body;
     try {
       const autorEncontrado = await autor.findById(novoLivro.autor);
@@ -58,9 +58,9 @@ class LivroController {
         message: `${erro.message} - falha ao cadastrar livro`
       });
     }
-  }
+  };
 
-  static async deletarLivro(req, res) {
+  static deletarLivro = async (req, res) => {
     try {
       const id = req.params.id;
       await livro.findByIdAndDelete(id);
@@ -72,9 +72,9 @@ class LivroController {
         message: `${erro.message} - falha ao excluir livro`
       });
     }
-  }
+  };
 
-  static async listarLivrosPorEditora(req, res) {
+  static listarLivrosPorEditora = async (req, res) => {
     const editora = req.query.editora;
     try {
       const livrosPorEditora = await livro.find({ editora });
@@ -84,7 +84,7 @@ class LivroController {
         message: `${erro.message} - falha ao excluir livro`
       });
     }
-  }
+  };
 
 }
 

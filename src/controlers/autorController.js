@@ -2,7 +2,7 @@ import { autor } from '../models/Autor.js';
 
 class AutorController {
 
-  static async listarAutores(req, res) {
+  static listarAutores = async (req, res) => {
     try {
       const listaAutores = await autor.find({});
       res.status(200).json(listaAutores);
@@ -11,9 +11,9 @@ class AutorController {
         message: `${erro.message} - falha ao buscar autores`
       });
     }
-  }
+  };
 
-  static async listarAutor(req, res) {
+  static listarAutor = async (req, res) => {
     try {
       const id = req.params.id;
       const autorEncontrado = await autor.findById(id);
@@ -23,9 +23,9 @@ class AutorController {
         message: `${erro.message} - falha ao buscar autor`
       });
     }
-  }
+  };
 
-  static async atualizarAutor(req, res) {
+  static atualizarAutor = async (req, res) => {
     try {
       const id = req.params.id;
       await autor.findByIdAndUpdate(id, req.body);
@@ -37,9 +37,9 @@ class AutorController {
         message: `${erro.message} - falha ao atualizar autor`
       });
     }
-  }
+  };
 
-  static async cadastrarAutor(req, res) {
+  static cadastrarAutor = async (req, res) => {
     try {
       const novoAutor = await autor.create(req.body);
       res.status(201).json({
@@ -51,9 +51,9 @@ class AutorController {
         message: `${erro.message} - falha ao cadastrar autor`
       });
     }
-  }
+  };
 
-  static async deletarAutor(req, res) {
+  static deletarAutor = async (req, res) => {
     try {
       const id = req.params.id;
       await autor.findByIdAndDelete(id);
@@ -65,7 +65,7 @@ class AutorController {
         message: `${erro.message} - falha ao excluir autor`
       });
     }
-  }
+  };
 
 }
 
