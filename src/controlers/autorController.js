@@ -2,30 +2,26 @@ import { autor } from '../models/Autor.js';
 
 class AutorController {
 
-  static listarAutores = async (req, res) => {
+  static listarAutores = async (req, res, next) => {
     try {
       const listaAutores = await autor.find({});
       res.status(200).json(listaAutores);
     } catch (erro) {
-      res.status(500).json({
-        message: `${erro.message} - falha ao buscar autores`
-      });
+      next(erro);
     }
   };
 
-  static listarAutor = async (req, res) => {
+  static listarAutor = async (req, res, next) => {
     try {
       const id = req.params.id;
       const autorEncontrado = await autor.findById(id);
       res.status(200).json(autorEncontrado);
     } catch (erro) {
-      res.status(500).json({
-        message: `${erro.message} - falha ao buscar autor`
-      });
+      next(erro);
     }
   };
 
-  static atualizarAutor = async (req, res) => {
+  static atualizarAutor = async (req, res, next) => {
     try {
       const id = req.params.id;
       await autor.findByIdAndUpdate(id, req.body);
@@ -33,13 +29,11 @@ class AutorController {
         message: 'Alterado com sucesso!'
       });
     } catch (erro) {
-      res.status(500).json({
-        message: `${erro.message} - falha ao atualizar autor`
-      });
+      next(erro);
     }
   };
 
-  static cadastrarAutor = async (req, res) => {
+  static cadastrarAutor = async (req, res, next) => {
     try {
       const novoAutor = await autor.create(req.body);
       res.status(201).json({
@@ -47,13 +41,11 @@ class AutorController {
         livro: novoAutor
       });
     } catch (erro) {
-      res.status(500).json({
-        message: `${erro.message} - falha ao cadastrar autor`
-      });
+      next(erro);
     }
   };
 
-  static deletarAutor = async (req, res) => {
+  static deletarAutor = async (req, res, next) => {
     try {
       const id = req.params.id;
       await autor.findByIdAndDelete(id);
@@ -61,9 +53,7 @@ class AutorController {
         message: 'Deletado com sucesso!'
       });
     } catch (erro) {
-      res.status(500).json({
-        message: `${erro.message} - falha ao excluir autor`
-      });
+      next(erro);
     }
   };
 
