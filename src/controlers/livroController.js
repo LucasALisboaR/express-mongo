@@ -46,7 +46,7 @@ class LivroController {
             const autorEncontrado = await autor.findById(novoLivro.autor);
             const livroCompleto = {
                 ...novoLivro,
-                autor: {...autorEncontrado._doc}
+                autor: { ...autorEncontrado._doc }
             }
             const livroCriado = await livro.create(livroCompleto)
             res.status(201).json({
@@ -73,6 +73,18 @@ class LivroController {
             })
         }
     };
+
+    static async listarLivrosPorEditora(req, res) {
+        const editora = req.query.editora;
+        try {
+            const livrosPorEditora = await livro.find({ editora });
+            res.status(200).json(livrosPorEditora);
+        } catch (erro) {
+            res.status(500).json({
+                message: `${erro.message} - falha ao excluir livro`
+            })
+        }
+    }
 
 };
 
