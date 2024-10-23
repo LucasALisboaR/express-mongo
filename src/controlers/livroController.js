@@ -1,12 +1,29 @@
 import livro from '../models/Livro.js';
 import { autor } from '../models/Autor.js';
+import RequisicaoIncorreta from '../erros/RequisicaoIncorreta.js';
 
 class LivroController {
 
   static listarLivros = async (req, res, next) => {
     try {
-      const listaLivros = await livro.find({});
-      res.status(200).json(listaLivros);
+      let { limit = 5, page = 1, ordenacao= '_id:-1' } = req.query;
+
+      let [campoOrdenacao, ordem] =ordenacao.split(':');
+      limit = parseInt(limit);
+      page = parseInt(page);
+      ordem = parseInt(ordem);
+
+      if (limit > 0 && page > 0) {
+        const listaLivros = await livro.find()
+          .sort({ [campoOrdenacao]: ordem })
+          .skip((page - 1) * limit)
+          .limit(limit)
+          .populate('autor')
+          .exec();
+        res.status(200).json(listaLivros);
+      } else {
+        next(new RequisicaoIncorreta());
+      }
     } catch (erro) {
       next(erro);
     }
@@ -67,11 +84,11 @@ class LivroController {
   static listarLivrosPorFiltro = async (req, res, next) => {
     try {
       const { editora, titulo } = req.query;
-            
+
       const busca = {};
       if (editora) busca.editora = editora;
-      if (titulo) busca.titulo = { $regex: titulo, $options: 'i'};
-      
+      if (titulo) busca.titulo = { $regex: titulo, $options: 'i' };
+
       const livrosPorEditora = await livro.find(busca);
       res.status(200).json(livrosPorEditora);
     } catch (erro) {
